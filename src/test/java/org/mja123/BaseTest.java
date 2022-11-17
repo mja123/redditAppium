@@ -30,6 +30,7 @@ public class BaseTest {
         capabilities.setCapability("deviceName", "Android Emulator");
         capabilities.setCapability("appPackage", "com.reddit.frontpage");
         capabilities.setCapability("appActivity", ".main.MainActivity");
+        //capabilities.setCapability("chromedriverExecutableDir", "/opt/homebrew/lib/node_modules/appium/node_modules/appium-chromedriver/");
 
         LOGGER.info("Instantiating driver");
         driver = new AndroidDriver(new URL("http://localhost:4723/wd/hub"), capabilities);

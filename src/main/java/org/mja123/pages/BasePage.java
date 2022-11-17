@@ -42,7 +42,6 @@ public abstract class BasePage {
                 .findFirst();
 
         if (target.isPresent()) {
-            System.out.println(target.get().getText());
             return target.get();
         }
 
