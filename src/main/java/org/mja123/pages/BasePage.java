@@ -26,12 +26,6 @@ public abstract class BasePage {
 
     protected WebElement factorySelector(IEnums option, By locator) throws ElementNotFound {
 
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(locator));
 
