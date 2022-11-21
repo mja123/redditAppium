@@ -7,6 +7,7 @@ import org.mja123.pages.ElementNotFound;
 import org.mja123.pages.homePage.HomePage;
 import org.mja123.pages.signUp.GooglePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -32,11 +33,7 @@ public class LoginPage extends BasePage {
 
         driver.findElement(googleButton).click();
 
-        if (!account.equals("")) {
-            return loginWithFrequentGoogleAccount(account);
-        }
-
-        return new GooglePage(driver);
+        return loginWithFrequentGoogleAccount(account);
 
     }
 
@@ -79,6 +76,8 @@ public class LoginPage extends BasePage {
 
 
             if (account.equals("Add another account")) {
+
+                LOGGER.info("Adding new google account");
                 accountOptions.get(accountOptions.size() - 1).click();
                 return new GooglePage(driver);
             }
@@ -89,13 +88,18 @@ public class LoginPage extends BasePage {
                     .findFirst();
 
             if (targetAccount.isPresent()) {
+                LOGGER.info("Selecting " + account + " account");
                 targetAccount.get().click();
                 return new HomePage(driver);
             }
+
             throw new ElementNotFound("Account not found!");
+
         } catch (TimeoutException e) {
             LOGGER.info("There isn't any registered google account");
             return new GooglePage(driver);
+        } catch (NoSuchElementException e) {
+            throw new ElementNotFound("Account not found!");
         }
     }
 

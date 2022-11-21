@@ -18,17 +18,20 @@ import java.time.Duration;
 
 public class WelcomePage extends BasePage {
 
+    private WebElement loginButton;
     public WelcomePage(AndroidDriver driver) {
         super(driver);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        loginButton = driver.findElement(AppiumBy.id("login_button"));
     }
 
     public BasePage signUpOptions(ESignUpOptions option) throws ElementNotFound {
 
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        LOGGER.info("Signup options");
 
         WebElement loginOption = factorySelector(option, AppiumBy.className("android.widget.Button"));
 
@@ -45,23 +48,25 @@ public class WelcomePage extends BasePage {
     }
 
     public LoginPage login(boolean useOpenSession) {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            driver.findElement(AppiumBy
-                    .androidUIAutomator("new UiSelector().resourceId(\"com.google.android.gms:id/cancel\""))
-                    .click();
-        } catch(NoSuchElementException e) {
-            LOGGER.info("Recent email doesn't found");
-        }
 
         if (!useOpenSession) {
             try {
-                driver.findElement(AppiumBy.id("login_button")).click();
+                LOGGER.info("Searching google open session");
+                By recentEmail = AppiumBy
+                        .androidUIAutomator("new UiSelector().resourceId(\"com.google.android.gms:id/cancel\"");
+
+                new WebDriverWait(driver, Duration.ofSeconds(1))
+                        .until(ExpectedConditions.elementToBeClickable(recentEmail));
+
+                driver.findElement(recentEmail).click();
+            } catch(TimeoutException e) {
+                LOGGER.info("Recent email doesn't found");
+            }
+
+
+            try {
+                loginButton.click();
+                LOGGER.info("Searching email open session");
 
                 new WebDriverWait(driver, Duration.ofSeconds(1))
                         .until(ExpectedConditions.elementToBeClickable(AppiumBy.id("account_remove")));
@@ -73,17 +78,12 @@ public class WelcomePage extends BasePage {
             }
         }
 
-        driver.findElement(AppiumBy.id("login_button")).click();
+        loginButton.click();
         return new LoginPage(driver);
 
     }
 
     public HomePage skipLogin() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         driver.findElement(AppiumBy.id("skip_button")).click();
         return new HomePage(driver);
@@ -92,6 +92,7 @@ public class WelcomePage extends BasePage {
     private void logOutRecentAccounts() {
         By logOutAccount = AppiumBy.id("account_remove");
 
+        LOGGER.info("Closing open session");
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(logOutAccount));
 

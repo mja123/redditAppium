@@ -3,7 +3,7 @@ package org.mja123.pages.signUp;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import org.mja123.pages.BasePage;
-import org.openqa.selenium.By;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -15,7 +15,7 @@ public class GooglePage extends BasePage {
     }
 
 
-    public void emailInput(String email) {
+    public void emailInput(String email) throws EmailAlreadyExist {
 
         By emailField = AppiumBy.className("android.widget.EditText");
 
@@ -25,6 +25,16 @@ public class GooglePage extends BasePage {
         driver.findElement(emailField).sendKeys(email);
 
         driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"Next\")")).click();
+
+        try {
+            driver.findElement(AppiumBy
+                    .androidUIAutomator("new UiSelector().textContains(\"This account already exists on your device\")"));
+
+            throw new EmailAlreadyExist("This account is already registered");
+
+        } catch(NoSuchElementException e) {
+            LOGGER.info("Email not registered");
+        }
     }
     public void passwordInput(String password) {
 
@@ -54,7 +64,14 @@ public class GooglePage extends BasePage {
         driver.findElement(agreeButton).click();
 
     }
+    public static class EmailAlreadyExist extends Exception {
+        public EmailAlreadyExist(String message) {
+            super(message);
+        }
+    }
 }
+
+
 
 /*
 TODO:
