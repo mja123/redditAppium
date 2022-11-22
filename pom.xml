@@ -14,7 +14,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <suite>/</suite>
+    <suite>login/LoginRegression.xml</suite>
   </properties>
 
   <dependencies>
@@ -55,13 +55,6 @@
       <version>2.19.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.password4j</groupId>
-      <artifactId>password4j</artifactId>
-      <version>1.6.2</version>
-    </dependency>
-
-
   </dependencies>
 
   <build>
@@ -72,9 +65,9 @@
         <version>3.0.0-M7</version>
         <configuration>
           <suiteXmlFiles>
-            <file>${project.build.directory}/test-classes/suite/${suite}</file>
+            <file>${project.build.directory}/test-classes/suites/${suite}</file>
           </suiteXmlFiles>
-            <skipTests>true</skipTests>
+<!--            <skipTests>true</skipTests>-->
         </configuration>
       </plugin>
     </plugins>

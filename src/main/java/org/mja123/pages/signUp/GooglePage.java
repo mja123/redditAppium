@@ -70,15 +70,3 @@ public class GooglePage extends BasePage {
         }
     }
 }
-
-
-
-/*
-TODO:
- 1- Create a test email
- 2- Finish the google and email register
- 3- Create suites
- 4- Start with Jenkins
- */
-
-

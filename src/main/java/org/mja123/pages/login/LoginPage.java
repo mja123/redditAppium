@@ -67,13 +67,19 @@ public class LoginPage extends BasePage {
 
     private BasePage loginWithFrequentGoogleAccount(String account) throws ElementNotFound {
         try {
-            By accountList = AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"com.google.android.gms:id/container\")");
-
             new WebDriverWait(driver, Duration.ofSeconds(2))
-                    .until(ExpectedConditions.elementToBeClickable(accountList));
+                    .until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.id("com.google.android.gms:id/account_display_name")));
 
-            List<WebElement> accountOptions = driver.findElements(accountList);
 
+//            By accountList = AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"com.google.android.gms:id/container\")");
+
+//            new WebDriverWait(driver, Duration.ofSeconds(2))
+//                    .until(ExpectedConditions.elementToBeClickable(accountList));
+
+
+            //List<WebElement> accountOptions = driver.findElements(accountList);
+            List<WebElement> accountOptions = driver.findElements(AppiumBy
+                    .androidUIAutomator("new UiSelector().resourceId(\"com.google.android.gms:id/container\")"));
 
             if (account.equals("Add another account")) {
 
