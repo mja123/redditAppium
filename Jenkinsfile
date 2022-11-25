@@ -4,8 +4,6 @@ pipeline {
         stage("set up") {
             steps {
                 sh 'emulator ${env.EMULATOR}'
-            }
-            steps {
                 sh 'appium'
             }
         }
