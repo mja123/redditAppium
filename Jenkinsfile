@@ -3,15 +3,15 @@ pipeline {
     stages {
         stage("set up") {
             steps {
-                emulator ${env.EMULATOR}
+                sh 'emulator ${env.EMULATOR}'
             }
             steps {
-                appium
+                sh 'appium'
             }
         }
         stage("test") {
             steps {
-                mvn clean test -dsuite=${env.SUITE}
+                sh 'mvn clean test -dsuite=${env.SUITE}'
             }
         }
     }
