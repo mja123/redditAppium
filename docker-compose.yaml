@@ -1,0 +1,16 @@
+services:
+  jenkins:
+    image: "jenkins/jenkins:jdk17"
+    volumes:
+      - jenkinsVolums:/var/jenkins_home
+    ports:
+      - 8080:8080
+      - 50000:50000
+    privileged: true
+
+
+volumes:
+  jenkinsVolums:
+
+
+      
