@@ -3,7 +3,8 @@ package org.mja123.pages.signUp;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import org.mja123.pages.BasePage;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -32,10 +33,11 @@ public class GooglePage extends BasePage {
 
             throw new EmailAlreadyExist("This account is already registered");
 
-        } catch(NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             LOGGER.info("Email not registered");
         }
     }
+
     public void passwordInput(String password) {
 
         By passwordField = AppiumBy.className("android.widget.EditText");
@@ -64,6 +66,7 @@ public class GooglePage extends BasePage {
         driver.findElement(agreeButton).click();
 
     }
+
     public static class EmailAlreadyExist extends Exception {
         public EmailAlreadyExist(String message) {
             super(message);
