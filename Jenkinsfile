@@ -1,17 +1,19 @@
 pipeline {
     agent any
+    tools {
+        maven 'maven'
+    }
+
     stages {
-        stage("set up") {
-            steps {
-                sh 'emulator ${env.EMULATOR}'
-            }
-            steps {
-                sh 'appium'
-            }
-        }
+//         stage("set up") {
+//             steps {
+//                 sh 'emulator ${env.EMULATOR}'
+//                 sh 'appium'
+//             }
+//         }
         stage("test") {
             steps {
-                sh 'mvn clean test -dsuite=${env.SUITE}'
+                sh 'mvn clean test'
             }
         }
     }
