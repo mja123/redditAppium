@@ -7,7 +7,12 @@ services:
       - 8080:8080
       - 50000:50000
     privileged: true
-
+  appium:
+    image: "appium/appium"
+    ports:
+      - 4723:4723
+  emulator:
+    image: "androidsdk/android-31"
 
 volumes:
   jenkinsVolums:
