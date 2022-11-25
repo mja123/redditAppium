@@ -8,7 +8,6 @@ import org.mja123.pages.signUp.ESignUpOptions;
 import org.mja123.pages.signUp.EmailSignUpPage;
 import org.mja123.pages.signUp.GooglePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,6 +18,7 @@ import java.time.Duration;
 public class WelcomePage extends BasePage {
 
     private WebElement loginButton;
+
     public WelcomePage(AndroidDriver driver) {
         super(driver);
         try {
@@ -59,7 +59,7 @@ public class WelcomePage extends BasePage {
                         .until(ExpectedConditions.elementToBeClickable(recentEmail));
 
                 driver.findElement(recentEmail).click();
-            } catch(TimeoutException e) {
+            } catch (TimeoutException e) {
                 LOGGER.info("Recent email doesn't found");
             }
 
@@ -72,7 +72,7 @@ public class WelcomePage extends BasePage {
                         .until(ExpectedConditions.elementToBeClickable(AppiumBy.id("account_remove")));
                 logOutRecentAccounts();
 
-            } catch(TimeoutException e) {
+            } catch (TimeoutException e) {
                 LOGGER.info("There isn't an open session");
                 return new LoginPage(driver);
             }
