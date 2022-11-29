@@ -20,7 +20,7 @@ pipeline {
 //         }
         stage("test") {
             steps {
-                sh 'mvn clean test -Dsuite=${params.SUITE}'
+                sh "mvn clean test -Dsuite=${params.SUITE}"
             }
         }
     }
