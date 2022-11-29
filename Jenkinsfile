@@ -2,9 +2,9 @@
 
 pipeline {
     agent any
-    tools {
-        maven 'maven'
-    }
+//     tools {
+//         maven 'maven'
+//     }
     parameters {
 //         string(name: 'EMULATOR', defaultValue: 'Android Emulator')
         string(name: 'SUITE', defaultValue: 'login/LoginRegression.xml')

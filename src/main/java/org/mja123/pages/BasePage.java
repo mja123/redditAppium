@@ -41,4 +41,5 @@ public abstract class BasePage {
 
         throw new ElementNotFound("Element not found");
     }
+
 }
