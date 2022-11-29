@@ -5,7 +5,7 @@ pipeline {
     tools {
       maven 'MAVEN_HOME'
     }
-    
+
     parameters {
 //         string(name: 'EMULATOR', defaultValue: 'Android Emulator')
         string(name: 'SUITE', defaultValue: 'login/LoginRegression.xml')
@@ -20,7 +20,7 @@ pipeline {
 //         }
         stage("test") {
             steps {
-                mvn 'clean test -Dsuite=${params.SUITE}'
+                sh 'mvn clean test -Dsuite=${params.SUITE}'
             }
         }
     }
