@@ -6,6 +6,10 @@ pipeline {
 //       maven 'MAVEN_HOME'
 //       maven 'Maven 3.8.6'
 //     }
+    tools {
+      maven 'maven'
+    }
+
 
     parameters {
 //         string(name: 'EMULATOR', defaultValue: 'Android Emulator')
