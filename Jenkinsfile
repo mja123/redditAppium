@@ -10,7 +10,7 @@ pipeline {
     parameters {
         string(name: 'EMULATOR', defaultValue: 'Android Emulator')
         string(name: 'SUITE', defaultValue: 'login/LoginRegression.xml')
-        string(name: 'EMULATOR-PATH')
+        string(name: 'EMULATOR-PATH', defaultValue: "$ANDROID_HOME/emulator")
     }
 
     stages {
