@@ -10,13 +10,13 @@ pipeline {
     parameters {
         string(name: 'EMULATOR', defaultValue: 'Android Emulator')
         string(name: 'SUITE', defaultValue: 'login/LoginRegression.xml')
-        string(name: 'EMULATOR-PATH', defaultValue: "$ANDROID_HOME/emulator")
+        string(name: 'SDK-PATH', defaultValue: "$ANDROID_HOME/emulator")
     }
 
     stages {
         stage("set up") {
             steps {
-                sh "cd ${params.EMULATOR-PATH}"
+                sh "cd ${params.SDK-PATH}"
                 sh "./emulator ${params.EMULATOR}"
                 sh 'appium'
             }
