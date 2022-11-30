@@ -2,9 +2,10 @@
 
 pipeline {
     agent any
-    tools {
-      maven 'MAVEN_HOME'
-    }
+//     tools {
+//       maven 'MAVEN_HOME'
+//       maven 'Maven 3.8.6'
+//     }
 
     parameters {
 //         string(name: 'EMULATOR', defaultValue: 'Android Emulator')
