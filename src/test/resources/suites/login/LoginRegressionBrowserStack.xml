@@ -1,0 +1,43 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Login regression" >
+
+    <test name="Google" parallel="tests">
+        <groups>
+            <run>
+                <include name="regression">
+                    <classes>
+                        <class name="org.mja123.login.GoogleLoginTest" />
+                    </classes>
+                </include>
+            </run>
+        </groups>
+    </test>
+
+
+    <test name="Email" >
+        <groups>
+            <run>
+                <include name="regression">
+                    <classes>
+                        <class name="org.mja123.login.EmailLoginTest"/>
+                    </classes>
+                </include>
+            </run>
+        </groups>
+    </test>
+
+
+    <test name="Skipped" >
+        <groups>
+            <run>
+                <include name="regression">
+                    <classes>
+                        <class name="org.mja123.login.SkipLoginTest"/>
+                    </classes>
+                </include>
+            </run>
+        </groups>
+    </test>
+
+</suite>

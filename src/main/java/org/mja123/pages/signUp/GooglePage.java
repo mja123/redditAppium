@@ -5,13 +5,14 @@ import io.appium.java_client.android.AndroidDriver;
 import org.mja123.pages.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
 public class GooglePage extends BasePage {
-    public GooglePage(AndroidDriver driver) {
+    public GooglePage(RemoteWebDriver driver) {
         super(driver);
     }
 

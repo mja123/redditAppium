@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 public class LoginPage extends BasePage {
 
-    public LoginPage(AndroidDriver driver) {
+    public LoginPage(RemoteWebDriver driver) {
         super(driver);
     }
 

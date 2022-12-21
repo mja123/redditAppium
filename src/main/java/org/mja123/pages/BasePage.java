@@ -5,6 +5,7 @@ import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -17,9 +18,9 @@ import java.util.Optional;
 
 public abstract class BasePage {
     protected static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    protected AndroidDriver driver;
+    protected RemoteWebDriver driver;
 
-    public BasePage(AndroidDriver driver) {
+    public BasePage(RemoteWebDriver driver) {
         this.driver = driver;
     }
 

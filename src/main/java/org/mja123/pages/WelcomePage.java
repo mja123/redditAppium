@@ -10,6 +10,7 @@ import org.mja123.pages.signUp.GooglePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,7 +20,7 @@ public class WelcomePage extends BasePage {
 
     private WebElement loginButton;
 
-    public WelcomePage(AndroidDriver driver) {
+    public WelcomePage(RemoteWebDriver driver) {
         super(driver);
         try {
             Thread.sleep(2000);
