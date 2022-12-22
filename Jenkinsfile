@@ -7,14 +7,13 @@ pipeline {
     }
 
     parameters {
-        string(name: 'SUITE', defaultValue: 'login/LoginRegression.xml')
+        string(name: 'SUITE', defaultValue: 'login/LoginRegressionBrowserStack.xml')
     }
 
     stages {
         stage("test") {
             steps {
                 sh "mvn clean"
-                sh "mvn compile"
                 sh "mvn test -Dsuite=${params.SUITE}"
             }
         }
