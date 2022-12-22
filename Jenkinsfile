@@ -8,13 +8,13 @@ pipeline {
 
     parameters {
         string(name: 'SUITE', defaultValue: 'login/LoginRegressionBrowserStack.xml')
-        string(name: 'PATH', defaultValue: '')
+        string(name: 'JSON_FILE', defaultValue: '')
     }
 
     stages {
         stage("setUp") {
             steps {
-                sh "cp ${params.PATH} src/main/resources/capabilities.json"
+                sh "cp ${params.JSON_FILE} src/main/resources/capabilities.json"
             }
         }
         stage("test") {
