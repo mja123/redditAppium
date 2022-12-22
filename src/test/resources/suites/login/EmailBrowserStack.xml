@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Email login">
+    <parameter name="device" value="Samsung Galaxy Tab S7"/>
+    <test name="Email">
+        <classes>
+            <class name="org.mja123.login.EmailLoginTest"/>
+        </classes>
+    </test>
+</suite>

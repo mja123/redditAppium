@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 import java.io.*;
 import java.lang.invoke.MethodHandles;
@@ -24,10 +25,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BaseTest {
     protected RemoteWebDriver driver;
-    private DesiredCapabilities capabilities;
+    private final DesiredCapabilities capabilities = new DesiredCapabilities();
     protected static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
@@ -48,32 +50,52 @@ public class BaseTest {
 //        driver = new AndroidDriver(new URL("http://localhost:4723/wd/hub"), capabilities);
 //    }
 
+    @Parameters("device")
     @BeforeMethod(alwaysRun = true)
-    public void setUp() throws IOException, ParseException {
+    public void setUp(String device) throws IOException, ParseException {
         String path = "src/main/resources/capabilities.json";
-        URL url = parseJSONFile(path);
+        URL url = parseJSONFile(path, device);
 
 
         driver = new RemoteWebDriver(url, capabilities);
     }
 
-    private URL parseJSONFile(String path) throws IOException, ParseException {
+    @AfterMethod(alwaysRun = true)
+    public void tearDown() {
+        driver.quit();
+    }
+
+    private URL parseJSONFile(String path, String device) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         JSONObject config = (JSONObject) parser.parse(new FileReader(path));
 
         JSONArray envs = (JSONArray) config.get("environments");
-        Map<String, String> envCapabilities = (Map<String, String>) envs.get(0);
-        Iterator<Map.Entry<String, String>> it = envCapabilities.entrySet().iterator();
+        Iterator<? extends Map.Entry<String, ?>> it;
 
-        while (it.hasNext()) {
-            Map.Entry<String, String> pair = it.next();
-            capabilities.setCapability(pair.getKey(), pair.getValue());
+        for (Object env : envs) {
+            Map<String, String> envCapabilities = (Map<String, String>) env;
+            //Iterating through the devices and checking if the device' name is the passed in the device parameter (currentDevice == 1)
+            int correctDevice = envCapabilities.entrySet().stream()
+                    .filter(k -> k.getKey().equals("device") && k.getValue().equals(device))
+                    .toList()
+                    .size();
+
+            //If this is true, fill the capabilities with the data in the current json object
+            if (correctDevice == 1) {
+                it = envCapabilities.entrySet().iterator();
+                while(it.hasNext()) {
+                     Map.Entry<String, ?> currentCapability = it.next();
+                    capabilities.setCapability(currentCapability.getKey(), currentCapability.getValue());
+                }
+                break;
+            }
         }
 
-        Map<String, String> commonCapabilities = (Map<String, String>) config.get("capabilities");
+        capabilities.asMap().forEach((k,v)-> System.out.println(k + ": " + v));
+        Map<String, ?> commonCapabilities = (Map<String, ?>) config.get("capabilities");
         it = commonCapabilities.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<String, String> pair = it.next();
+            Map.Entry<String, ?> pair = it.next();
             if (capabilities.getCapability(pair.getKey()) == null) {
                 capabilities.setCapability(pair.getKey(), pair.getValue());
             }
@@ -92,13 +114,7 @@ public class BaseTest {
         if (app != null && !app.isEmpty()) {
             capabilities.setCapability("app", app);
         }
-
         return new URL("http://" + username + ":" + accessKey + "@" + config.get("server") + "/wd/hub");
-    }
-
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() {
-        driver.quit();
     }
 
     protected String searchProperty(String property) throws IOException {
@@ -111,11 +127,5 @@ public class BaseTest {
         input.close();
 
         return target;
-    }
-
-    static class DriverSessionException extends Exception {
-        DriverSessionException(String message) {
-            super(message);
-        }
     }
 }
