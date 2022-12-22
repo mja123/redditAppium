@@ -8,7 +8,7 @@ pipeline {
 
     parameters {
         string(name: 'SUITE', defaultValue: 'login/LoginRegressionBrowserStack.xml')
-        string(name: 'PATH')
+        string(name: 'PATH', defaultValue: '')
     }
 
     stages {
