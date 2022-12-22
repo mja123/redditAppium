@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage("setUp") {
             steps {
-                sh "cp ${params.PATH} src/main/resources/capabilities.json"
+                cp "${params.PATH} src/main/resources/capabilities.json"
             }
         }
         stage("test") {
