@@ -16,6 +16,7 @@ pipeline {
             steps {
                 sh "cp ${params.PATH} src/main/resources/capabilities.json"
             }
+        }
         stage("test") {
             steps {
                 sh "mvn clean"
