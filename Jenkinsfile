@@ -8,9 +8,14 @@ pipeline {
 
     parameters {
         string(name: 'SUITE', defaultValue: 'login/LoginRegressionBrowserStack.xml')
+        string(name: 'PATH')
     }
 
     stages {
+        stage("setUp") {
+            steps {
+                sh "cp ${params.PATH} src/main/resources/capabilities.json"
+            }
         stage("test") {
             steps {
                 sh "mvn clean"
