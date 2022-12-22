@@ -13,7 +13,9 @@ pipeline {
     stages {
         stage("test") {
             steps {
-                sh "mvn clean test -Dsuite=${params.SUITE}"
+                sh "mvn clean"
+                sh "mvn compile"
+                sh "mvn test -Dsuite=${params.SUITE}"
             }
         }
     }
