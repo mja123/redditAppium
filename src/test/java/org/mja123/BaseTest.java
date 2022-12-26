@@ -3,6 +3,7 @@ package org.mja123;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.appium.java_client.android.AndroidDriver;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,6 +14,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
@@ -28,8 +31,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BaseTest {
-    protected RemoteWebDriver driver;
-    private final DesiredCapabilities capabilities = new DesiredCapabilities();
+    protected volatile RemoteWebDriver driver;
+    private volatile DesiredCapabilities capabilities = new DesiredCapabilities();
     protected static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
@@ -50,14 +53,15 @@ public class BaseTest {
 //        driver = new AndroidDriver(new URL("http://localhost:4723/wd/hub"), capabilities);
 //    }
 
-    @Parameters("device")
-    @BeforeMethod(alwaysRun = true)
-    public void setUp(String device) throws IOException, ParseException {
+
+        public  void setUp(String device) throws IOException, ParseException {
         String path = "src/main/resources/capabilities.json";
-        URL url = parseJSONFile(path, device);
-
-
-        driver = new RemoteWebDriver(url, capabilities);
+        System.out.println(Thread.currentThread().getId());
+        synchronized (this) {
+            System.out.println(Thread.currentThread().getId());
+            URL url = parseJSONFile(path, device);
+            driver = new RemoteWebDriver(url, capabilities);
+        }
     }
 
     @AfterMethod(alwaysRun = true)
@@ -68,30 +72,14 @@ public class BaseTest {
     private URL parseJSONFile(String path, String device) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         JSONObject config = (JSONObject) parser.parse(new FileReader(path));
-
-        JSONArray envs = (JSONArray) config.get("environments");
         Iterator<? extends Map.Entry<String, ?>> it;
 
-        for (Object env : envs) {
-            Map<String, String> envCapabilities = (Map<String, String>) env;
-            //Iterating through the devices and checking if the device' name is the passed in the device parameter (currentDevice == 1)
-            int correctDevice = envCapabilities.entrySet().stream()
-                    .filter(k -> k.getKey().equals("device") && k.getValue().equals(device))
-                    .toList()
-                    .size();
-
-            //If this is true, fill the capabilities with the data in the current json object
-            if (correctDevice == 1) {
-                it = envCapabilities.entrySet().iterator();
-                while(it.hasNext()) {
-                     Map.Entry<String, ?> currentCapability = it.next();
-                    capabilities.setCapability(currentCapability.getKey(), currentCapability.getValue());
-                }
-                break;
-            }
+        if (device.length() < 5 && Character.isDigit(device.charAt(0))) {
+            selectingDevice(Integer.parseInt(device), config);
+        } else {
+            selectingDevice(device, config);
         }
 
-        capabilities.asMap().forEach((k,v)-> System.out.println(k + ": " + v));
         Map<String, ?> commonCapabilities = (Map<String, ?>) config.get("capabilities");
         it = commonCapabilities.entrySet().iterator();
         while (it.hasNext()) {
@@ -117,6 +105,54 @@ public class BaseTest {
         return new URL("http://" + username + ":" + accessKey + "@" + config.get("server") + "/wd/hub");
     }
 
+    private void selectingDevice(String device, JSONObject config) {
+        JSONArray envs = (JSONArray) config.get("environments");
+        Iterator<Map.Entry<String, String>> it;
+
+        for (Object env : envs) {
+            Map<String, String> envCapabilities = (Map<String, String>) env;
+            //Iterating through the devices and checking if the device' name is the passed in the device parameter (currentDevice == 1)
+            int correctDevice = envCapabilities.entrySet().stream()
+                    .filter(k -> k.getKey().equals("device") && k.getValue().equals(device))
+                    .toList()
+                    .size();
+
+            //If this is true, fill the capabilities with the data in the current json object
+            if (correctDevice == 1) {
+                it = envCapabilities.entrySet().iterator();
+                while(it.hasNext()) {
+                    Map.Entry<String, ?> currentCapability = it.next();
+                    capabilities.setCapability(currentCapability.getKey(), currentCapability.getValue());
+                }
+                break;
+            }
+        }
+
+        capabilities.asMap().forEach((k,v)-> System.out.println(k + ": " + v));
+    }
+
+    private void selectingDevice(int device, JSONObject config) {
+        JSONArray envs = (JSONArray) config.get("environments");
+        Map<String, String> envCapabilities;
+        Iterator<Map.Entry<String, String>> it;
+
+        if (envs.size() <= device) {
+            envCapabilities = (Map<String, String>) envs.get(0);
+            LOGGER.warn("Device number is bigger than the available devices count. First device is used");
+
+        } else {
+                envCapabilities = (Map<String, String>) envs.get(device);
+        }
+
+        it = envCapabilities.entrySet().iterator();
+
+        while(it.hasNext()) {
+            Map.Entry<String, ?> currentCapability = it.next();
+            capabilities.setCapability(currentCapability.getKey(), currentCapability.getValue());
+        }
+        capabilities.asMap().forEach((k,v)-> System.out.println(k + ": " + v));
+
+    }
     protected String searchProperty(String property) throws IOException {
         InputStream input = new FileInputStream(System.getProperty("user.dir").concat("/src/test/resources/credentials.properties"));
 
@@ -128,4 +164,10 @@ public class BaseTest {
 
         return target;
     }
+
+//    static class DeviceSelectionException extends Exception {
+//        DeviceSelectionException(String message) {
+//            super(message);
+//        }
+//    }
 }
