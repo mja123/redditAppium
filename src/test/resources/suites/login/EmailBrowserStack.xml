@@ -1,7 +1,8 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
-<suite name="Email login" parallel="methods" thread-count="7">
+<suite name="Email login">
     <test name="Email">
+<!--        <parameter name="device" value="${device}"/>-->
         <classes>
             <class name="org.mja123.login.EmailBrowserStackTest"/>
         </classes>

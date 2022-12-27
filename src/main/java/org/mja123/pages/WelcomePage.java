@@ -85,7 +85,7 @@ public class WelcomePage extends BasePage {
     }
 
     public HomePage skipLogin() {
-
+        LOGGER.info("Searching skip button");
         driver.findElement(AppiumBy.id("skip_button")).click();
         return new HomePage(driver);
     }
